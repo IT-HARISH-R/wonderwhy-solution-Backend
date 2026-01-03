@@ -1,17 +1,33 @@
-import mongoose from 'mongoose'
-import { MONGODB_URL, PORT } from './utils/config.js'
-import app from './app.js'
+import app from "./app.js";
+import sequelize from "./db.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 
-mongoose.connect(MONGODB_URL)
-    .then(() => {
-        console.log("\x1b[32m%s\x1b[0m", "✅ Database connected successfully");
+const PORT = process.env.PORT || 3000;
 
-        app.listen(PORT, () => {
-            console.log("\x1b[36m%s\x1b[0m", `🚀 Server is running on http://localhost:${PORT}`);
-        })
-    })
+const startServer = async () => {
+  try {
+    // 1️⃣ Test DB connection
+    await sequelize.authenticate();
+    console.log("AWS RDS PostgreSQL connected");
 
-    .catch((error) => {
-        console.error("\x1b[31m%s\x1b[0m", "❌ Database connection failed:", error.message);
+    // 2️⃣ Sync models (development only)
+    await sequelize.sync({
+      alter: process.env.NODE_ENV !== "production"
     });
+    console.log("Sequelize models synced");
+
+    // 3️⃣ Start server
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error(" Database connection failed");
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+startServer();
