@@ -6,7 +6,7 @@ import cors from 'cors'
 const app = express()
 
 app.use(cors({
-  origin: 'http://56.228.33.77/',
+  origin: 'http://56.228.33.77',
   credentials: true
 }));
 
