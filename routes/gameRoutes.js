@@ -1,11 +1,4 @@
-import express from 'express';
-import {
-  createGame,
-  playRound,
-  getAllGames,
-  getGameById,
-  getGameStats
-} from '../controllers/gameController.js';
+import express from 'express'; import { createGame, playRound, getAllGames, getGameById, getGameStats } from '../controllers/gameController.js';
 
 const router = express.Router();
 
