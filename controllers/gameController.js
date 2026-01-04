@@ -1,4 +1,3 @@
-// controllers/gameController.js
 import prisma from "../prismaClient.js";
 
 // ======================= CREATE GAME =======================
