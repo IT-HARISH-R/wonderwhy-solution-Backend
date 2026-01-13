@@ -23,7 +23,7 @@ export const playRound = async (req, res) => {
   const { gameId, roundNumber, player1Choice, player2Choice } = req.body;
 
   try {
-    // 1️⃣ Calculate winner
+    //  Calculate winner
     let winner = null;
     if (player1Choice === player2Choice) winner = null; // tie
     else if (
@@ -38,7 +38,7 @@ export const playRound = async (req, res) => {
 
     console.log("Winner calculated:", winner);
 
-    // 2️⃣ Save round in DB
+    //  Save round in DB
     const round = await prisma.round.create({
       data: {
         roundNumber,
@@ -49,7 +49,7 @@ export const playRound = async (req, res) => {
       }
     });
 
-    // 3️⃣ Update game scores
+    //  Update game scores
     const game = await prisma.game.findUnique({
       where: { id: gameId },
       include: { rounds: true }
@@ -65,7 +65,7 @@ export const playRound = async (req, res) => {
       else ties++;
     });
 
-    // 4️⃣ Determine game winner if 6 rounds done
+    //  Determine game winner if 6 rounds done
     let gameWinner = null;
     if (game.rounds.length === 6) {
       if (player1Score > player2Score) gameWinner = "player1";
@@ -73,7 +73,7 @@ export const playRound = async (req, res) => {
       else gameWinner = "tie";
     }
 
-    // 5️⃣ Return response
+    //  Return response
     res.status(201).json({
       round,
       scores: { player1: player1Score, player2: player2Score, ties },
